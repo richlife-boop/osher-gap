@@ -1,0 +1,2 @@
+const http=require('http'),fs=require('fs'),path=require('path');
+http.createServer((req,res)=>{const p=path.resolve(__dirname,'.'+decodeURIComponent(req.url.split('?')[0]));if(!p.startsWith(__dirname+path.sep)){res.writeHead(403).end();return;}fs.readFile(p,(e,b)=>{if(e){res.writeHead(404).end();return;}res.setHeader('Content-Type',p.endsWith('.js')?'text/javascript; charset=utf-8':'text/html; charset=utf-8');res.end(b);});}).listen(8765,'127.0.0.1',()=>console.log('Audit server on 127.0.0.1:8765'));
