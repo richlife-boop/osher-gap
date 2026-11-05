@@ -146,6 +146,8 @@ console.log('--- maslul chofesh kalkali ---');
 click(pick('freedom'));
 ok('pane chofesh galui', !$('pane-freedom').hidden);
 ok('pane yeladim mustar', $('pane-kids').hidden);
+ok('ha tavnit shel ha gil muvenet', $('pane-freedom').textContent.indexOf('מאיזה גיל זה יתחיל') > 0,
+   $('pane-freedom').textContent.replace(/\s+/g, ' ').slice(0, 75));
 type('wantMonthly', 8000);
 click(goBtn('3'));
 click(goBtn('4'));
