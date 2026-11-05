@@ -237,13 +237,21 @@ $('lOk').checked = true;
 var sent = null;
 window.fetch = function(u, o){ sent = { url: u, opt: o }; return Promise.resolve({}); };
 submit();
-ok('nishlach la webhook', sent && sent.url.indexOf('hook.eu2.make.com') > 0, sent ? sent.url.slice(-22) : 'lo nishlach');
-var payload = sent ? JSON.parse(sent.opt.body) : {};
-ok('ha tag nachon', payload.tag === 'calc-goal-gap', payload.tag);
-ok('yesh shem, telefon, email', payload.name === 'אבי' && payload.phone === '0501234567' && payload.email === 'a@b.co.il');
-ok('yesh et ha paar ba payload', typeof payload.gap === 'number', String(payload.gap));
-ok('yesh sug ha yaad', payload.goal_type === 'kids', payload.goal_type);
-ok('bli preflight (text/plain)', sent.opt.headers['Content-Type'].indexOf('text/plain') === 0);
+ok('nishlach la webhook shel Fireberry', sent && sent.url.indexOf('vkkcs5er32scebp61kcdh47cl5ray9ih') > 0,
+   sent ? sent.url.slice(-20) : 'lo nishlach');
+ok('LO la webhook shel ha reshimot', sent.url.indexOf('0j6ujdpk46') < 0);
+var pp = {};
+String(sent.opt.body).split('&').forEach(function(kv){
+  var e = kv.indexOf('=');
+  pp[decodeURIComponent(kv.slice(0, e))] = decodeURIComponent(kv.slice(e + 1));
+});
+ok('urlencoded ve lo JSON', String(sent.opt.body).indexOf('{') < 0);
+ok('bli preflight (urlencoded)', sent.opt.headers['Content-Type'].indexOf('application/x-www-form-urlencoded') === 0);
+ok('shlosha sdot she ha tarchish memape', pp.name === 'אבי' && pp.phone === '0501234567' && pp.email === 'a@b.co.il');
+ok('yesh makor', pp.source === 'מחשבון הפער', pp.source);
+ok('yesh sikum l sde ha teur', pp.summary.indexOf('מחשבון הפער') === 0, pp.summary);
+ok('ha paar meugal, bli nekudot', pp.gap.indexOf('.') < 0, pp.gap);
+ok('sug ha yaad b ivrit', pp.goal_type === 'ילדים', pp.goal_type);
 
 
 console.log('--- kelet pasul lo mashir misparim yeshanim ba kaftor ---');

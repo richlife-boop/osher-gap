@@ -366,7 +366,9 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
   var MAX_KIDS = 6, EF_MONTHS = 3;
   var goal = 'kids', step = 1, kidCount = 0;
   var LAST = { gap: null, need: null, what: '' };
-  var HOOK = 'https://hook.eu2.make.com/0j6ujdpk46wpe2srg953tj8awyx4eqn3';
+  /* 🔴 הוובהוק של תרחיש 9528256, שיוצר ליד אמיתי בפייברי בסטטוס "1) חדש".
+     לא הוובהוק של רשימות הדיוור. ליד שנוחת ברשימת מיילים הוא ליד שאף אחד לא מתקשר אליו. */
+  var HOOK = 'https://hook.eu2.make.com/vkkcs5er32scebp61kcdh47cl5ray9ih';
   var SOFI = '972552767144';
 
   function nis(n){
@@ -745,20 +747,33 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
       });
     } catch(ignore) {}
 
+    var gapR = (LAST.gap === null || !isFinite(LAST.gap)) ? '' : String(Math.round(LAST.gap));
+    var needR = (LAST.need === null || !isFinite(LAST.need)) ? '' : String(Math.round(LAST.need));
+    var GOALNAME = { kids: 'ילדים', freedom: 'להפסיק לעבוד', custom: 'יעד אישי' };
+
+    /* שלושת הראשונים הם מה שהתרחיש ממפה לפייברי:
+       name→accountname, phone→telephone1, email→emailaddress1.
+       השאר נשלח לצורך ההקשר, ומחכה לעדכון שדה התיאור בתרחיש. */
     var data = {
-      tag: 'calc-goal-gap',
-      name: name, phone: phone, email: mail, consent: true,
-      goal_type: goal,
-      gap: LAST.gap === null ? null : Math.round(LAST.gap),
-      monthly_needed: LAST.need === null ? null : Math.round(LAST.need),
-      monthly_saving: num('save'), has_today: num('has'), monthly_expense: num('exp'),
+      name: name, phone: phone, email: mail,
+      source: 'מחשבון הפער',
+      goal_type: GOALNAME[goal] || goal,
+      gap: gapR, monthly_needed: needR,
+      monthly_saving: String(num('save')), has_today: String(num('has')),
+      monthly_expense: String(num('exp')),
+      summary: 'מחשבון הפער, ' + (GOALNAME[goal] || goal) +
+               (gapR ? ', חסר ' + gapR : '') + (needR ? ', צריך ' + needR + ' בחודש' : ''),
       page_url: location.href,
       utm_source: q.utm_source || '', utm_medium: q.utm_medium || '',
       utm_campaign: q.utm_campaign || '', utm_content: q.utm_content || ''
     };
 
-    /* text/plain נבחר בכוונה: הוא לא מפעיל preflight, ולכן המשלוח
-       עובד גם כשהדף יושב על דומיין אחר מהוובהוק. */
+    /* urlencoded ולא JSON: זאת בקשה פשוטה בלי preflight, ולכן היא עוברת
+       גם כשהדף יושב על דומיין אחר. זה גם הפורמט שאומת חי מול התרחיש. */
+    var body = Object.keys(data).map(function(k){
+      return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
+    }).join('&');
+
     var done = function(){
       $('leadForm').hidden = true;
       $('thanks').hidden = false;
@@ -766,8 +781,8 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
     try {
       fetch(HOOK, {
         method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-        body: JSON.stringify(data)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: body
       }).then(done, done);
     } catch(ex) { done(); }
   });
