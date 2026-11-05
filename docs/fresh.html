@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>בדיקה, תמיד הגרסה האחרונה</title>
+</head>
+<body>
+<div id="osher-gap"></div>
+<script>
+(function(){
+  var v = Date.now();
+  var l = document.createElement("link");
+  l.rel = "stylesheet"; l.href = "./gap.css?v=" + v;
+  document.head.appendChild(l);
+  var s = document.createElement("script");
+  s.src = "./gap.js?v=" + v;
+  document.body.appendChild(s);
+})();
+</script>
+</body>
+</html>

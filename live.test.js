@@ -42,7 +42,15 @@ const type = (id, v) => {
 
   console.log('--- shlosha maslulim ---');
   click(doc.querySelector('.pick[data-goal="kids"]'));
-  click(go('3')); click(go('4'));
+  var ag = doc.querySelectorAll('.kAge');
+  ok('ein brirot mechdal la gilim', ag[0].value === '' && ag[1].value === '');
+  click(go('3'));
+  ok('shaar: bli milui lo ovrim', !!doc.querySelector('.step.on[data-step="2"]'));
+  [].forEach.call(ag, function(a, i){ a.value = i ? '9' : '4';
+    a.dispatchEvent(new window.Event('input', { bubbles: true })); });
+  click(go('3'));
+  type('save', 900); type('has', 0); type('exp', 18695);
+  click(go('4'));
   ok('yeladim: totzaa', out().length > 200, out().length + ' chars');
   ok('yeladim: graf', !!doc.querySelector('#out .chart svg'));
   ok('yeladim: hero', !!doc.querySelector('#out .tile.hero'));
@@ -50,7 +58,7 @@ const type = (id, v) => {
 
   click(go('3')); click(go('2')); click(go('1'));
   click(doc.querySelector('.pick[data-goal="freedom"]'));
-  type('wantMonthly', 8000);
+  type('wantMonthly', 8000); type('myAge', 40); type('freedomAge', 55);
   click(go('3')); click(go('4'));
   ok('chofesh: hon 2,400,000', out().includes('2,400,000'));
 

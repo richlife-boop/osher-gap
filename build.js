@@ -109,6 +109,37 @@ const preview = [
 
 fs.writeFileSync(path.join(DIST, 'index.html'), preview, 'utf8');
 
+/* 🔴 דף בדיקה שעוקף מטמון. לקבצים יש מטמון של 10 דקות, וזה גרם פעמיים
+   להסתכל על גרסה ישנה ולהסיק מסקנה שגויה. כאן כל טעינה מביאה את העדכני. */
+const fresh = [
+  '<!DOCTYPE html>',
+  '<html lang="he" dir="rtl">',
+  '<head>',
+  '<meta charset="utf-8">',
+  '<meta name="viewport" content="width=device-width,initial-scale=1">',
+  '<meta name="robots" content="noindex,nofollow">',
+  '<title>בדיקה, תמיד הגרסה האחרונה</title>',
+  '</head>',
+  '<body>',
+  '<div id="' + MOUNT + '"></div>',
+  '<script>',
+  '(function(){',
+  '  var v = Date.now();',
+  '  var l = document.createElement("link");',
+  '  l.rel = "stylesheet"; l.href = "./gap.css?v=" + v;',
+  '  document.head.appendChild(l);',
+  '  var s = document.createElement("script");',
+  '  s.src = "./gap.js?v=" + v;',
+  '  document.body.appendChild(s);',
+  '})();',
+  '</script>',
+  '</body>',
+  '</html>',
+  ''
+].join('\n');
+
+fs.writeFileSync(path.join(DIST, 'fresh.html'), fresh, 'utf8');
+
 const kb = (f) => Math.round(fs.statSync(path.join(DIST, f)).size / 1024) + ' KB';
 console.log('נבנה ב-docs/');
 console.log('  gap.css    ' + kb('gap.css'));
