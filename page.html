@@ -180,40 +180,41 @@
         <div class="kidhead"><span>שם הילד</span><span>בן כמה</span><span></span></div>
         <div id="kids"></div>
         <button class="addkid" id="addKid" type="button">הוספת ילד</button>
-        <details class="adv">
-          <summary><span id="advSum"></span> <u>לשינוי</u></summary>
+        <div class="adv">
           <div class="row">
             <div><label for="perChild">כמה כסף לכל ילד</label>
               <input id="perChild" type="number" inputmode="numeric" value="600000"></div>
             <div><label for="targetAge">עד איזה גיל</label>
               <input id="targetAge" type="number" inputmode="numeric" value="20"></div>
           </div>
-        </details>
+          <p class="hint" id="advSum"></p>
+        </div>
       </div>
 
       <div id="pane-freedom" hidden>
         <div class="fld"><label for="wantMonthly">כמה כסף תרצו לקבל כל חודש בלי לעבוד</label>
-          <input id="wantMonthly" type="number" inputmode="numeric" value="8000"></div>
+          <input id="wantMonthly" type="number" inputmode="numeric" placeholder=""></div>
         <div class="fld row">
           <div><label for="myAge">בני כמה אתם היום</label>
-            <input id="myAge" type="number" inputmode="numeric" value="40"></div>
+            <input id="myAge" type="number" inputmode="numeric" placeholder=""></div>
           <div><label for="freedomAge">מאיזה גיל זה יתחיל</label>
-            <input id="freedomAge" type="number" inputmode="numeric" value="55"></div>
+            <input id="freedomAge" type="number" inputmode="numeric" placeholder=""></div>
         </div>
       </div>
 
       <div id="pane-custom" hidden>
         <div class="fld"><label for="cName">מה אתם רוצים</label>
-          <input id="cName" type="text" value="שדרוג דירה"></div>
+          <input id="cName" type="text" placeholder="למשל: דירה גדולה יותר" value=""></div>
         <div class="fld row">
           <div><label for="cAmount">כמה זה יעלה</label>
-            <input id="cAmount" type="number" inputmode="numeric" value="400000"></div>
+            <input id="cAmount" type="number" inputmode="numeric" placeholder=""></div>
           <div><label for="cYears">בתוך כמה שנים</label>
-            <input id="cYears" type="number" inputmode="numeric" value="10"></div>
+            <input id="cYears" type="number" inputmode="numeric" placeholder=""></div>
         </div>
       </div>
     </div>
 
+    <p class="err" id="err2" hidden></p>
     <div class="nav"><button class="btn" type="button" data-go="3">הבא</button>
       <button class="back" type="button" data-go="1">חזרה</button></div>
   </section>
@@ -225,14 +226,15 @@
 
     <div class="panel">
       <div class="fld"><label for="save">כמה אתם חוסכים כל חודש</label>
-        <input id="save" type="number" inputmode="numeric" value="900"></div>
+        <input id="save" type="number" inputmode="numeric" placeholder=""></div>
       <div class="fld"><label for="has">כמה כסף יש לכם בצד היום</label>
-        <input id="has" type="number" inputmode="numeric" value="0">
+        <input id="has" type="number" inputmode="numeric" placeholder="">
         <p class="hint">הכל ביחד. גם מה שחסכתם למטרה וגם מה ששמור למקרה שההכנסה נעצרת.</p></div>
       <div class="fld"><label for="exp">כמה הבית מוציא כל חודש</label>
-        <input id="exp" type="number" inputmode="numeric" value="18695"></div>
+        <input id="exp" type="number" inputmode="numeric" placeholder=""></div>
     </div>
 
+    <p class="err" id="err3" hidden></p>
     <div class="nav"><button class="btn" type="button" data-go="4">לראות כמה חסר</button>
       <button class="back" type="button" data-go="2">חזרה</button></div>
   </section>
@@ -358,8 +360,66 @@
       goStep(2);
     });
   });
+  function raw(id){ return String($(id).value || '').trim(); }
+  function filled(id){ return raw(id).length > 0 && isFinite(parseFloat(raw(id))); }
+
+  /* 🔴 אין ברירות מחדל לשדות שהם עובדה של המשתמש.
+     מספר שמופיע מראש הופך לתשובה שלו, והפער כבר לא שלו. */
+  function validate(step){
+    if(step === 2){
+      if(goal === 'kids'){
+        var rows = document.querySelectorAll('.kidrow');
+        if(!rows.length) return 'הוסיפו ילד אחד לפחות.';
+        var tAge = filled('targetAge') ? num('targetAge') : 0;
+        if(!(tAge > 0)) return 'צריך למלא עד איזה גיל.';
+        if(!filled('perChild') || num('perChild') <= 0) return 'צריך למלא כמה כסף לכל ילד.';
+        for(var i = 0; i < rows.length; i++){
+          var v = String(rows[i].querySelector('.kAge').value || '').trim();
+          if(!v.length || !isFinite(parseFloat(v))) return 'צריך למלא גיל לכל ילד.';
+          if(parseFloat(v) >= tAge) return 'יש ילד שכבר עבר את גיל ' + tAge + '. הסירו אותו או שנו את הגיל.';
+          if(parseFloat(v) < 0) return 'גיל לא יכול להיות שלילי.';
+        }
+        return '';
+      }
+      if(goal === 'freedom'){
+        if(!filled('wantMonthly') || num('wantMonthly') <= 0) return 'צריך למלא כמה כסף תרצו כל חודש.';
+        if(!filled('myAge') || num('myAge') <= 0) return 'צריך למלא בני כמה אתם היום.';
+        if(!filled('freedomAge')) return 'צריך למלא מאיזה גיל זה יתחיל.';
+        if(num('freedomAge') <= num('myAge')) return 'הגיל שבחרתם כבר עבר. בחרו גיל גדול יותר.';
+        return '';
+      }
+      if(!filled('cAmount') || num('cAmount') <= 0) return 'צריך למלא כמה זה יעלה.';
+      if(!filled('cYears') || num('cYears') < 1) return 'צריך למלא בתוך כמה שנים, לפחות שנה.';
+      return '';
+    }
+    if(step === 3){
+      if(!filled('save')) return 'צריך למלא כמה אתם חוסכים כל חודש. אפשר גם 0.';
+      if(num('save') < 0) return 'הסכום לא יכול להיות שלילי.';
+      if(!filled('has')) return 'צריך למלא כמה כסף יש לכם בצד. אפשר גם 0.';
+      if(num('has') < 0) return 'הסכום לא יכול להיות שלילי.';
+      if(!filled('exp') || num('exp') <= 0) return 'צריך למלא כמה הבית מוציא כל חודש.';
+      return '';
+    }
+    return '';
+  }
+
+  function showErr(step, msg){
+    var el = $('err' + step);
+    if(!el) return;
+    el.textContent = msg || '';
+    el.hidden = !msg;
+  }
+
   Array.prototype.forEach.call(document.querySelectorAll('[data-go]'), function(b){
-    b.addEventListener('click', function(){ goStep(parseInt(b.getAttribute('data-go'), 10)); });
+    b.addEventListener('click', function(){
+      var target = parseInt(b.getAttribute('data-go'), 10);
+      if(target > step){
+        var msg = validate(step);
+        if(msg){ showErr(step, msg); return; }
+      }
+      showErr(step, '');
+      goStep(target);
+    });
   });
 
   function syncAddBtn(){ $('addKid').style.display = (kidCount >= MAX_KIDS) ? 'none' : 'block'; }
@@ -369,7 +429,8 @@
     var d = document.createElement('div');
     d.className = 'kidrow';
     d.innerHTML = '<input type="text" class="kName" placeholder="לא חובה" value="">' +
-      '<input type="number" inputmode="numeric" class="kAge" value="' + age + '">' +
+      '<input type="number" inputmode="numeric" class="kAge" placeholder="גיל" value="' +
+        (age === null || age === undefined ? '' : age) + '">' +
       '<button type="button" class="kDel" aria-label="הסרת ילד" title="הסרה">&times;</button>';
     $('kids').appendChild(d);
     d.querySelector('.kDel').addEventListener('click', function(){
@@ -384,13 +445,16 @@
       return { age: isFinite(a) ? a : 0, name: n || ('ילד ' + (i + 1)) };
     });
   }
-  $('addKid').addEventListener('click', function(){ addKid(8); });
-  addKid(4); addKid(9);
+  $('addKid').addEventListener('click', function(){ addKid(null); });
+  addKid(null); addKid(null);
 
   /* השורה שמחליפה את המילה "הגדרות": אומרת מה מונח, בלי שצריך לפתוח כלום */
   function syncAdv(){
-    $('advSum').textContent = 'חישבנו ' + num('perChild', 600000).toLocaleString('he-IL') +
-      ' ש"ח לכל ילד, עד גיל ' + num('targetAge', 20) + '.';
+    var pc = filled('perChild') ? num('perChild') : 0;
+    var ta = filled('targetAge') ? num('targetAge') : 0;
+    $('advSum').textContent = (pc > 0 && ta > 0)
+      ? 'כלומר ' + pc.toLocaleString('he-IL') + ' ש"ח לכל ילד, עד גיל ' + ta + '.'
+      : 'אפשר לשנות את שני המספרים האלה.';
   }
   $('perChild').addEventListener('input', syncAdv);
   $('targetAge').addEventListener('input', syncAdv);

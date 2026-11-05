@@ -51,11 +51,10 @@ ok('pane yeladim galui', !$('pane-kids').hidden);
 ok('pane chofesh mustar', $('pane-freedom').hidden);
 ok('ha koteret hitadkena', $('h2title').textContent.includes('הילדים'), $('h2title').textContent);
 ok('2 yeladim k brirat mechdal', doc.querySelectorAll('.kidrow').length === 2);
-ok('ha hagdarot sgurot', !doc.querySelector('.adv').open);
-ok('ha summary omer ma munach', $('advSum').textContent.includes('600,000') &&
+ok('ha hagdarot lo mustarot yoter', !doc.querySelector('details.adv'));
+ok('ha mishpat omer ma munach', $('advSum').textContent.includes('600,000') &&
    $('advSum').textContent.includes('גיל 20'), $('advSum').textContent);
-ok('ve lo kotev "hagdarot"', !doc.querySelector('.adv summary').textContent.includes('הגדרות'),
-   doc.querySelector('.adv summary').textContent.trim());
+ok('ha sdot gluyim', !!$('perChild') && !!$('targetAge'));
 type('perChild', 450000);
 ok('ha summary mitadken im ha erech', $('advSum').textContent.includes('450,000'), $('advSum').textContent);
 type('targetAge', 18);
@@ -63,9 +62,24 @@ ok('ve gam im ha gil', $('advSum').textContent.includes('גיל 18'));
 type('perChild', 600000); type('targetAge', 20);
 ok('mad hitkadmut: 2', doc.querySelectorAll('.bar i.on').length === 2);
 
-console.log('--- shlav 3 ---');
+console.log('--- shaar: ein brirot mechdal, lo ovrim im reik ---');
 click(goBtn('3'));
-ok('avarnu l shlav 3', onStep() === '3', onStep());
+ok('bli gil yeled lo ovrim', onStep() === '2', onStep());
+ok('yesh hodaat shgiaa', !$('err2').hidden, $('err2').textContent);
+var ag = doc.querySelectorAll('.kAge');
+ok('ha gilim reikim k brirat mechdal', ag[0].value === '' && ag[1].value === '');
+typeEl(ag[0], 4); typeEl(ag[1], 9);
+click(goBtn('3'));
+ok('im gilim ovrim', onStep() === '3', onStep());
+ok('ha hodaa neelma', $('err2').hidden);
+
+console.log('--- shlav 3 ---');
+ok('shlosha sdot reikim', $('save').value === '' && $('has').value === '' && $('exp').value === '',
+   [$('save').value, $('has').value, $('exp').value].join('|'));
+click(goBtn('4'));
+ok('bli milui lo ovrim l totzaa', onStep() === '3', onStep());
+ok('yesh hodaa', !$('err3').hidden, $('err3').textContent);
+type('save', 900); type('has', 0); type('exp', 18695);
 ok('shlosha sdot bilvad', doc.querySelectorAll('[data-step="3"] input').length === 3,
    doc.querySelectorAll('[data-step="3"] input').length + ' sdot');
 
@@ -150,14 +164,26 @@ ok('ha tavnit shel ha gil muvenet', $('pane-freedom').textContent.indexOf('מא�
    $('pane-freedom').textContent.replace(/\s+/g, ' ').slice(0, 75));
 type('wantMonthly', 8000);
 click(goBtn('3'));
+ok('bli gilim lo ovrim', onStep() === '2', $('err2').textContent);
+type('myAge', 40); type('freedomAge', 55);
+click(goBtn('3'));
+ok('im gilim ovrim', onStep() === '3');
 click(goBtn('4'));
 ok('8,000 bachodesh -> hon 2,400,000', out().includes('2,400,000'), out().slice(0, 60));
 ok('ein tavlat yeladim ba maslul ha ze', !out().includes('לפי ילד'));
 ok('yesh tavlat dchiya', out().includes('אותו סכום'));
+click(goBtn('3')); click(goBtn('2'));
+type('freedomAge', 30);
+click(goBtn('3'));
+ok('gil chofesh katan me ha gil ha nochechi -> hodaa', onStep() === '2' && !$('err2').hidden,
+   $('err2').textContent);
+type('freedomAge', 55);
 
 console.log('--- yaad ishi ve kelet pasul ---');
 click(goBtn('3')); click(goBtn('2')); click(goBtn('1'));
 click(pick('custom'));
+click(goBtn('3'));
+ok('yaad ishi reik -> lo ovrim', onStep() === '2', $('err2').textContent);
 type('cAmount', 400000);
 type('cYears', 15);
 click(goBtn('3')); click(goBtn('4'));
@@ -187,13 +213,17 @@ ok('takrat 6 yeladim', doc.querySelectorAll('.kidrow').length === 6,
 ok('kaftor ha hosafa nestar', $('addKid').style.display === 'none');
 Array.prototype.slice.call(doc.querySelectorAll('.kDel')).forEach(b => click(b));
 ok('efshar lehasir et kulam', doc.querySelectorAll('.kidrow').length === 0);
-click(goBtn('3')); click(goBtn('4'));
-ok('bli yeladim -> hodaa ve lo crash', out().includes('אין מה לחשב'), out().slice(0, 40));
-click(goBtn('3')); click(goBtn('2'));
+click(goBtn('3'));
+ok('bli yeladim -> hodaa ve lo ma'+'avar', onStep() === '2' && !$('err2').hidden, $('err2').textContent);
 click($('addKid'));
 typeEl(doc.querySelector('.kAge'), 25);
-click(goBtn('3')); click(goBtn('4'));
-ok('yeled me al gil ha yaad -> hodaa', out().includes('אין מה לחשב'));
+click(goBtn('3'));
+ok('yeled me al gil ha yaad -> hodaa', onStep() === '2' && $('err2').textContent.indexOf('עבר את גיל') > 0,
+   $('err2').textContent);
+typeEl(doc.querySelector('.kAge'), 6);
+click(goBtn('3'));
+ok('acharei tikun ovrim', onStep() === '3');
+click(goBtn('4'));
 ok('ve ein Infinity', !$('out').innerHTML.includes('Infinity'));
 
 
