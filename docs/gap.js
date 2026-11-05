@@ -1,7 +1,7 @@
 /* מחשבון הפער, אושר פיננסי. נבנה אוטומטית מ-page.html. אין לערוך ידנית. */
 (function(){
   var MOUNT_ID = "osher-gap";
-  var SKELETON = "<div class=\"wrap\">\r\n\r\n  <div class=\"bar\"><i class=\"on\"></i><i></i><i></i><i></i></div>\r\n\r\n  <section class=\"step on\" data-step=\"1\">\r\n    <p class=\"stepno\">שלב 1 מתוך 4</p>\r\n    <h1>מה אתם רוצים <span class=\"mark\">להשיג</span></h1>\r\n    <p class=\"lede\">בוחרים אחד. אפשר לשנות בהמשך.</p>\r\n    <div class=\"picks\">\r\n      <button class=\"pick\" type=\"button\" data-goal=\"kids\">\r\n        <b>לתת לילדים</b><span>דירה וחתונה, לכל ילד</span></button>\r\n      <button class=\"pick\" type=\"button\" data-goal=\"freedom\">\r\n        <b>להפסיק לעבוד</b><span>כסף שנכנס כל חודש גם בלי עבודה</span></button>\r\n      <button class=\"pick\" type=\"button\" data-goal=\"custom\">\r\n        <b>משהו אחר</b><span>דירה גדולה יותר, עסק, כל דבר</span></button>\r\n    </div>\r\n  </section>\r\n\r\n  <section class=\"step\" data-step=\"2\">\r\n    <p class=\"stepno\">שלב 2 מתוך 4</p>\r\n    <h1 id=\"h2title\">הפרטים</h1>\r\n    <p class=\"lede\" id=\"h2lede\"></p>\r\n\r\n    <div class=\"panel\">\r\n      <div id=\"pane-kids\">\r\n        <div class=\"kidhead\"><span>שם הילד</span><span>בן כמה</span><span></span></div>\r\n        <div id=\"kids\"></div>\r\n        <button class=\"addkid\" id=\"addKid\" type=\"button\">הוספת ילד</button>\r\n        <details class=\"adv\">\r\n          <summary><span id=\"advSum\"></span> <u>לשינוי</u></summary>\r\n          <div class=\"row\">\r\n            <div><label for=\"perChild\">כמה כסף לכל ילד</label>\r\n              <input id=\"perChild\" type=\"number\" inputmode=\"numeric\" value=\"600000\"></div>\r\n            <div><label for=\"targetAge\">עד איזה גיל</label>\r\n              <input id=\"targetAge\" type=\"number\" inputmode=\"numeric\" value=\"20\"></div>\r\n          </div>\r\n        </details>\r\n      </div>\r\n\r\n      <div id=\"pane-freedom\" hidden>\r\n        <div class=\"fld\"><label for=\"wantMonthly\">כמה כסף תרצו לקבל כל חודש בלי לעבוד</label>\r\n          <input id=\"wantMonthly\" type=\"number\" inputmode=\"numeric\" value=\"8000\"></div>\r\n        <div class=\"fld row\">\r\n          <div><label for=\"myAge\">בני כמה אתם היום</label>\r\n            <input id=\"myAge\" type=\"number\" inputmode=\"numeric\" value=\"40\"></div>\r\n          <div><label for=\"freedomAge\">ומאיזה גיל</label>\r\n            <input id=\"freedomAge\" type=\"number\" inputmode=\"numeric\" value=\"55\"></div>\r\n        </div>\r\n      </div>\r\n\r\n      <div id=\"pane-custom\" hidden>\r\n        <div class=\"fld\"><label for=\"cName\">מה אתם רוצים</label>\r\n          <input id=\"cName\" type=\"text\" value=\"שדרוג דירה\"></div>\r\n        <div class=\"fld row\">\r\n          <div><label for=\"cAmount\">כמה זה יעלה</label>\r\n            <input id=\"cAmount\" type=\"number\" inputmode=\"numeric\" value=\"400000\"></div>\r\n          <div><label for=\"cYears\">בתוך כמה שנים</label>\r\n            <input id=\"cYears\" type=\"number\" inputmode=\"numeric\" value=\"10\"></div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"nav\"><button class=\"btn\" type=\"button\" data-go=\"3\">הבא</button>\r\n      <button class=\"back\" type=\"button\" data-go=\"1\">חזרה</button></div>\r\n  </section>\r\n\r\n  <section class=\"step\" data-step=\"3\">\r\n    <p class=\"stepno\">שלב 3 מתוך 4</p>\r\n    <h1>ומה יש לכם <span class=\"mark\">היום</span></h1>\r\n    <p class=\"lede\">שלוש שאלות אחרונות.</p>\r\n\r\n    <div class=\"panel\">\r\n      <div class=\"fld\"><label for=\"save\">כמה אתם חוסכים כל חודש</label>\r\n        <input id=\"save\" type=\"number\" inputmode=\"numeric\" value=\"900\"></div>\r\n      <div class=\"fld\"><label for=\"has\">כמה כסף יש לכם בצד היום</label>\r\n        <input id=\"has\" type=\"number\" inputmode=\"numeric\" value=\"0\">\r\n        <p class=\"hint\">הכל ביחד. גם מה שחסכתם למטרה וגם מה ששמור למקרה שההכנסה נעצרת.</p></div>\r\n      <div class=\"fld\"><label for=\"exp\">כמה הבית מוציא כל חודש</label>\r\n        <input id=\"exp\" type=\"number\" inputmode=\"numeric\" value=\"18695\"></div>\r\n    </div>\r\n\r\n    <div class=\"nav\"><button class=\"btn\" type=\"button\" data-go=\"4\">לראות כמה חסר</button>\r\n      <button class=\"back\" type=\"button\" data-go=\"2\">חזרה</button></div>\r\n  </section>\r\n\r\n  <section class=\"step\" data-step=\"4\">\r\n    <p class=\"stepno\">שלב 4 מתוך 4</p>\r\n    <h1>כמה כסף <span class=\"mark\">חסר</span></h1>\r\n    <div id=\"out\"></div>\r\n    <div class=\"nav\"><button class=\"btn\" type=\"button\" id=\"cta\">אני רוצה תוכנית לסגור את זה</button>\r\n      <button class=\"back\" type=\"button\" data-go=\"3\">חזרה</button></div>\r\n    <div class=\"assump\">\r\n      הכסף גדל ב-6.2% בשנה, אחרי דמי ניהול. לא חישבנו עליית מחירים. הכסף למקרה שההכנסה נעצרת שמור במזומן ולא גדל. זה מחשבון כללי.\r\n    </div>\r\n  </section>\r\n\r\n</div>";
+  var SKELETON = "<div class=\"wrap\">\r\n\r\n  <div class=\"bar\"><i class=\"on\"></i><i></i><i></i><i></i></div>\r\n\r\n  <section class=\"step on\" data-step=\"1\">\r\n    <p class=\"stepno\">שלב 1 מתוך 4</p>\r\n    <h1>מה אתם רוצים <span class=\"mark\">להשיג</span></h1>\r\n    <p class=\"lede\">בוחרים אחד. אפשר לשנות בהמשך.</p>\r\n    <div class=\"picks\">\r\n      <button class=\"pick\" type=\"button\" data-goal=\"kids\">\r\n        <b>לתת לילדים</b><span>דירה וחתונה, לכל ילד</span></button>\r\n      <button class=\"pick\" type=\"button\" data-goal=\"freedom\">\r\n        <b>להפסיק לעבוד</b><span>כסף שנכנס כל חודש גם בלי עבודה</span></button>\r\n      <button class=\"pick\" type=\"button\" data-goal=\"custom\">\r\n        <b>משהו אחר</b><span>דירה גדולה יותר, עסק, כל דבר</span></button>\r\n    </div>\r\n  </section>\r\n\r\n  <section class=\"step\" data-step=\"2\">\r\n    <p class=\"stepno\">שלב 2 מתוך 4</p>\r\n    <h1 id=\"h2title\">הפרטים</h1>\r\n    <p class=\"lede\" id=\"h2lede\"></p>\r\n\r\n    <div class=\"panel\">\r\n      <div id=\"pane-kids\">\r\n        <div class=\"kidhead\"><span>שם הילד</span><span>בן כמה</span><span></span></div>\r\n        <div id=\"kids\"></div>\r\n        <button class=\"addkid\" id=\"addKid\" type=\"button\">הוספת ילד</button>\r\n        <details class=\"adv\">\r\n          <summary><span id=\"advSum\"></span> <u>לשינוי</u></summary>\r\n          <div class=\"row\">\r\n            <div><label for=\"perChild\">כמה כסף לכל ילד</label>\r\n              <input id=\"perChild\" type=\"number\" inputmode=\"numeric\" value=\"600000\"></div>\r\n            <div><label for=\"targetAge\">עד איזה גיל</label>\r\n              <input id=\"targetAge\" type=\"number\" inputmode=\"numeric\" value=\"20\"></div>\r\n          </div>\r\n        </details>\r\n      </div>\r\n\r\n      <div id=\"pane-freedom\" hidden>\r\n        <div class=\"fld\"><label for=\"wantMonthly\">כמה כסף תרצו לקבל כל חודש בלי לעבוד</label>\r\n          <input id=\"wantMonthly\" type=\"number\" inputmode=\"numeric\" value=\"8000\"></div>\r\n        <div class=\"fld row\">\r\n          <div><label for=\"myAge\">בני כמה אתם היום</label>\r\n            <input id=\"myAge\" type=\"number\" inputmode=\"numeric\" value=\"40\"></div>\r\n          <div><label for=\"freedomAge\">ומאיזה גיל</label>\r\n            <input id=\"freedomAge\" type=\"number\" inputmode=\"numeric\" value=\"55\"></div>\r\n        </div>\r\n      </div>\r\n\r\n      <div id=\"pane-custom\" hidden>\r\n        <div class=\"fld\"><label for=\"cName\">מה אתם רוצים</label>\r\n          <input id=\"cName\" type=\"text\" value=\"שדרוג דירה\"></div>\r\n        <div class=\"fld row\">\r\n          <div><label for=\"cAmount\">כמה זה יעלה</label>\r\n            <input id=\"cAmount\" type=\"number\" inputmode=\"numeric\" value=\"400000\"></div>\r\n          <div><label for=\"cYears\">בתוך כמה שנים</label>\r\n            <input id=\"cYears\" type=\"number\" inputmode=\"numeric\" value=\"10\"></div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"nav\"><button class=\"btn\" type=\"button\" data-go=\"3\">הבא</button>\r\n      <button class=\"back\" type=\"button\" data-go=\"1\">חזרה</button></div>\r\n  </section>\r\n\r\n  <section class=\"step\" data-step=\"3\">\r\n    <p class=\"stepno\">שלב 3 מתוך 4</p>\r\n    <h1>ומה יש לכם <span class=\"mark\">היום</span></h1>\r\n    <p class=\"lede\">שלוש שאלות אחרונות.</p>\r\n\r\n    <div class=\"panel\">\r\n      <div class=\"fld\"><label for=\"save\">כמה אתם חוסכים כל חודש</label>\r\n        <input id=\"save\" type=\"number\" inputmode=\"numeric\" value=\"900\"></div>\r\n      <div class=\"fld\"><label for=\"has\">כמה כסף יש לכם בצד היום</label>\r\n        <input id=\"has\" type=\"number\" inputmode=\"numeric\" value=\"0\">\r\n        <p class=\"hint\">הכל ביחד. גם מה שחסכתם למטרה וגם מה ששמור למקרה שההכנסה נעצרת.</p></div>\r\n      <div class=\"fld\"><label for=\"exp\">כמה הבית מוציא כל חודש</label>\r\n        <input id=\"exp\" type=\"number\" inputmode=\"numeric\" value=\"18695\"></div>\r\n    </div>\r\n\r\n    <div class=\"nav\"><button class=\"btn\" type=\"button\" data-go=\"4\">לראות כמה חסר</button>\r\n      <button class=\"back\" type=\"button\" data-go=\"2\">חזרה</button></div>\r\n  </section>\r\n\r\n  <section class=\"step\" data-step=\"4\">\r\n    <p class=\"stepno\">שלב 4 מתוך 4</p>\r\n    <h1>כמה כסף <span class=\"mark\">חסר</span></h1>\r\n    <div id=\"out\"></div>\r\n    <div class=\"card ctabox\">\r\n      <h2 id=\"ctaTitle\">רוצים לסגור את זה?</h2>\r\n      <a class=\"btn wa\" id=\"waBtn\" href=\"#\" target=\"_blank\" rel=\"noopener\">לדבר איתנו בוואטסאפ</a>\r\n      <button class=\"btn ghost\" type=\"button\" id=\"openForm\">או להשאיר פרטים ונחזור אליכם</button>\r\n\r\n      <form id=\"leadForm\" hidden>\r\n        <div class=\"fld\"><label for=\"lName\">איך קוראים לכם</label>\r\n          <input id=\"lName\" type=\"text\" autocomplete=\"name\"></div>\r\n        <div class=\"fld\"><label for=\"lPhone\">טלפון</label>\r\n          <input id=\"lPhone\" type=\"tel\" inputmode=\"tel\" autocomplete=\"tel\"></div>\r\n        <div class=\"fld\"><label for=\"lMail\">אימייל</label>\r\n          <input id=\"lMail\" type=\"email\" inputmode=\"email\" autocomplete=\"email\"></div>\r\n        <label class=\"chk\"><input id=\"lOk\" type=\"checkbox\"><span>מאשר/ת שתחזרו אליי</span></label>\r\n        <p class=\"err\" id=\"lErr\" hidden></p>\r\n        <button class=\"btn\" type=\"submit\" id=\"lSend\">שליחה</button>\r\n      </form>\r\n\r\n      <div id=\"thanks\" hidden>\r\n        <p class=\"done\">קיבלנו. נחזור אליכם.</p>\r\n      </div>\r\n    </div>\r\n    <div class=\"nav\"><button class=\"back\" type=\"button\" data-go=\"3\">חזרה</button></div>\r\n    <div class=\"assump\">\r\n      הכסף גדל ב-6.2% בשנה, אחרי דמי ניהול. לא חישבנו עליית מחירים. הכסף למקרה שההכנסה נעצרת שמור במזומן ולא גדל. זה מחשבון כללי.\r\n    </div>\r\n  </section>\r\n\r\n</div>";
   function boot(){
     var host = document.getElementById(MOUNT_ID);
     if(!host){ return; }
@@ -365,6 +365,9 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
   var R = E.netRate();
   var MAX_KIDS = 6, EF_MONTHS = 3;
   var goal = 'kids', step = 1, kidCount = 0;
+  var LAST = { gap: null, need: null, what: '' };
+  var HOOK = 'https://hook.eu2.make.com/0j6ujdpk46wpe2srg953tj8awyx4eqn3';
+  var SOFI = '972552767144';
 
   function nis(n){
     if(n === null || n === undefined || !isFinite(n)) return null;
@@ -563,6 +566,9 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
   }
 
   function render(){
+    /* 🔴 מאפסים קודם. בלי זה יציאה מוקדמת משאירה מספרים מחישוב קודם
+       והלקוח שולח לסופי נתון שגוי. */
+    LAST = { gap: null, need: null, what: '' };
     var save = num('save'), have = num('has'), exp = num('exp');
     var ef = E.emergencyFund(exp, EF_MONTHS, have, save);
     /* אותו כסף לא יכול לעשות שתי עבודות.
@@ -589,10 +595,10 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
       var kids = readKids();
       var live = kids.filter(function(k){ return tAge - k.age > 0; });
       var over = kids.filter(function(k){ return tAge - k.age <= 0; });
-      if(!live.length){ $('out').innerHTML = out + invalidCard(); return; }
+      if(!live.length){ $('out').innerHTML = out + invalidCard(); syncCta(); return; }
       var pl = E.childrenPlan(live, save, R, forGoal, per, tAge);
       if(pl.state === 'INVALID' || !isFinite(pl.monthlyNeeded)){
-        $('out').innerHTML = out + invalidCard(); return;
+        $('out').innerHTML = out + invalidCard(); syncCta(); return;
       }
       /* לא "באיחור" סתם. מי מהילדים, ובאיזה גיל הוא באמת יקבל. */
       var worst = null;
@@ -612,6 +618,7 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
         tile('חסר לכם', nis(pl.shortfall), 'ש"ח', pl.shortfall > 0, true) +
         tile('צריך כל חודש', nis(pl.monthlyNeeded), 'ש"ח') +
         tile('אתם חוסכים', nis(save), 'ש"ח') + '</div></div>';
+      LAST = { gap: pl.shortfall, need: pl.monthlyNeeded, what: 'לילדים שלי' };
       ser = E.seriesChildren(pl, R);
       out += chartHtml(ser);
       out += '<div class="card"><h2>לפי ילד</h2><table><thead><tr><th>הילד</th>' +
@@ -644,7 +651,7 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
         amount = num('cAmount'); years = num('cYears');
       }
       var v = E.verdict(amount, years, save, R, forGoal, null);
-      if(v.state === 'INVALID'){ $('out').innerHTML = out + invalidCard(); return; }
+      if(v.state === 'INVALID'){ $('out').innerHTML = out + invalidCard(); syncCta(); return; }
       /* "תגיעו ב-2051 במקום ב-2042" מובן מיד. "באיחור של 9.3 שנים" לא. */
       var lbl = (v.yearsToReach != null)
         ? 'תגיעו ב-' + yearIn(v.yearsToReach) + ' במקום ב-' + yearIn(years)
@@ -654,6 +661,8 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
         tile('צריך כל חודש', nis(v.monthlyNeeded), 'ש"ח') +
         tile(goal === 'freedom' ? 'צריך לאסוף' : 'אתם חוסכים',
              nis(goal === 'freedom' ? amount : save), 'ש"ח') + '</div></div>';
+      LAST = { gap: v.shortfall, need: v.monthlyNeeded,
+               what: goal === 'freedom' ? 'כדי להפסיק לעבוד' : 'ליעד שלי' };
       ser = E.seriesSingle(amount, years, save, R, forGoal);
       out += chartHtml(ser);
       out += '<div class="card"><h2>אותו סכום, לפי מתי מתחילים</h2><table><thead><tr>' +
@@ -670,11 +679,106 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
     }
     $('out').innerHTML = out;
     wireChart(ser);
+    syncCta();
   }
 
-  /* שינוי ערך אחרי שראו את התוצאה מעדכן אותה מיד */
+  /* ===== שתי ההנעות לפעולה =====
+     וואטסאפ לסופי, והשארת פרטים כמו ליד רגיל. */
+
+  /* ההודעה כתובה בקול של הלקוח, כי זה מה שהוא שולח.
+     🔴 לא לכתוב אותה בגוף שלישי, הלקוח רואה בדיוק את הטקסט הזה. */
+  function waText(){
+    var t = 'היי, עשיתי את המחשבון באתר.';
+    if(LAST.gap !== null && isFinite(LAST.gap) && LAST.gap > 0){
+      t += ' יצא לי שחסר ' + nis(LAST.gap) + ' ש"ח ' + LAST.what + '.';
+    }
+    if(LAST.need !== null && isFinite(LAST.need) && LAST.need > 0){
+      t += ' ושצריך ' + nis(LAST.need) + ' ש"ח כל חודש.';
+    }
+    return t + ' אשמח להבין מה עושים מכאן.';
+  }
+  function syncCta(){
+    $('waBtn').setAttribute('href', 'https://wa.me/' + SOFI + '?text=' + encodeURIComponent(waText()));
+    if(LAST.gap !== null && isFinite(LAST.gap) && LAST.gap > 0){
+      $('ctaTitle').textContent = 'רוצים לסגור את ה' + nis(LAST.gap) + ' האלה?';
+    } else {
+      $('ctaTitle').textContent = 'רוצים לוודא שאתם באמת בדרך?';
+    }
+  }
+
+  $('openForm').addEventListener('click', function(){
+    $('leadForm').hidden = false;
+    $('openForm').hidden = true;
+    $('lName').focus();
+  });
+
+  function clean(s){ return String(s || '').trim(); }
+  function validPhone(p){
+    var d = clean(p).replace(/[^0-9]/g, '');
+    if(d.length < 9) return false;
+    if(d.length > 15) return false;
+    return true;
+  }
+
+  $('leadForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = clean($('lName').value), phone = clean($('lPhone').value), mail = clean($('lMail').value);
+    var err = '';
+    if(name.length < 2) err = 'צריך שם.';
+    else if(!validPhone(phone)) err = 'צריך מספר טלפון תקין.';
+    else if(mail.indexOf('@') < 1 || mail.indexOf('.') < 0) err = 'צריך אימייל תקין.';
+    else if(!$('lOk').checked) err = 'צריך לאשר שנחזור אליכם.';
+    if(err){
+      $('lErr').textContent = err;
+      $('lErr').hidden = false;
+      return;
+    }
+    $('lErr').hidden = true;
+    $('lSend').disabled = true;
+    $('lSend').textContent = 'שולח...';
+
+    var q = {};
+    try {
+      location.search.replace(/^\?/, '').split('&').forEach(function(kv){
+        var i = kv.indexOf('=');
+        if(i > 0) q[decodeURIComponent(kv.slice(0, i))] = decodeURIComponent(kv.slice(i + 1));
+      });
+    } catch(ignore) {}
+
+    var data = {
+      tag: 'calc-goal-gap',
+      name: name, phone: phone, email: mail, consent: true,
+      goal_type: goal,
+      gap: LAST.gap === null ? null : Math.round(LAST.gap),
+      monthly_needed: LAST.need === null ? null : Math.round(LAST.need),
+      monthly_saving: num('save'), has_today: num('has'), monthly_expense: num('exp'),
+      page_url: location.href,
+      utm_source: q.utm_source || '', utm_medium: q.utm_medium || '',
+      utm_campaign: q.utm_campaign || '', utm_content: q.utm_content || ''
+    };
+
+    /* text/plain נבחר בכוונה: הוא לא מפעיל preflight, ולכן המשלוח
+       עובד גם כשהדף יושב על דומיין אחר מהוובהוק. */
+    var done = function(){
+      $('leadForm').hidden = true;
+      $('thanks').hidden = false;
+    };
+    try {
+      fetch(HOOK, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+        body: JSON.stringify(data)
+      }).then(done, done);
+    } catch(ex) { done(); }
+  });
+
+  /* שינוי ערך אחרי שראו את התוצאה מעדכן אותה מיד.
+     🔴 שדות הטופס מוחרגים, אחרת כל הקשה בשם מריצה חישוב מחדש. */
   document.addEventListener('input', function(e){
-    if(step === 4 && e.target && e.target.matches('input')) render();
+    if(step !== 4) return;
+    if(!e.target || !e.target.matches('input')) return;
+    if(e.target.closest('#leadForm')) return;
+    render();
   });
 })();
   }

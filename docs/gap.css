@@ -71,6 +71,15 @@ input:focus{outline:2px solid var(--olive-mid);outline-offset:1px}
   font:inherit;font-size:17px;font-weight:500;cursor:pointer}
 .back{flex:0 0 auto;background:none;border:0;color:var(--olive-mid);font:inherit;font-weight:500;
   padding:15px 6px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.ctabox .btn{display:block;width:100%;text-align:center;text-decoration:none;margin:0 0 10px}
+.ctabox .wa{background:#1f7a4d;color:#fff}
+.ctabox .ghost{background:none;color:var(--olive);border:1px solid var(--sand)}
+.chk{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--olive);
+  font-weight:400;margin:4px 0 14px;cursor:pointer}
+.chk input{width:19px;height:19px;flex:0 0 auto;accent-color:var(--olive)}
+.err{color:var(--off);font-size:13.5px;font-weight:500;margin:0 0 10px}
+.done{background:var(--cream);border-radius:12px;padding:18px;text-align:center;
+  font-size:17px;font-weight:500;margin:0}
 
 .card{background:var(--white);border:1px solid var(--sand);border-radius:16px;padding:18px;margin:0 0 12px}
 h2{font-weight:500;font-size:17px;margin:0 0 12px}

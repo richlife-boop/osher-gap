@@ -194,6 +194,73 @@ click(goBtn('3')); click(goBtn('4'));
 ok('yeled me al gil ha yaad -> hodaa', out().includes('אין מה לחשב'));
 ok('ve ein Infinity', !$('out').innerHTML.includes('Infinity'));
 
+
+console.log('--- shtei ha hanaot l peula ---');
+/* bonim matzav naki: shnei yeladim b gilim tkinim */
+click(pick('kids'));
+Array.prototype.slice.call(doc.querySelectorAll('.kDel')).forEach(b => click(b));
+click($('addKid')); click($('addKid'));
+var ages = doc.querySelectorAll('.kAge');
+typeEl(ages[0], 4); typeEl(ages[1], 9);
+click(goBtn('3'));
+type('save', 900); type('has', 0); type('exp', 18695);
+click(goBtn('4'));
+ok('matzav naki: yesh totzaa', out().indexOf('חסר לכם') > 0, out().slice(0, 35));
+var wa = $('waBtn').getAttribute('href');
+ok('kaftor WhatsApp kayam', !!wa, (wa || '').slice(0, 42));
+ok('ha mispar shel Sofi', wa.indexOf('972552767144') > 0);
+var msg = decodeURIComponent(wa.split('text=')[1] || '');
+ok('ha hodaa b kol ha lakoach', msg.indexOf('עשיתי את המחשבון') === 4 || msg.indexOf('עשיתי') > 0, msg.slice(0, 50));
+ok('ein guf shlishi ba hodaa', msg.indexOf('הלקוח') < 0 && msg.indexOf('המשתמש') < 0);
+ok('ha hodaa mekila et ha mispar', /[0-9],[0-9]/.test(msg), msg.slice(-60));
+ok('ha koteret mitadkenet lefi ha paar', $('ctaTitle').textContent.indexOf('לסגור') > 0,
+   $('ctaTitle').textContent);
+
+console.log('--- ha tofes ---');
+ok('ha tofes mustar b hatchala', $('leadForm').hidden);
+click($('openForm'));
+ok('nifta b lechitza', !$('leadForm').hidden);
+ok('ha kaftor ha poteach neelam', $('openForm').hidden);
+function submit(){ $('leadForm').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true })); }
+submit();
+ok('tofes reik -> shgiaa', !$('lErr').hidden, $('lErr').textContent);
+type('lName', 'אבי');
+submit();
+ok('bli telefon -> shgiaa', $('lErr').textContent.indexOf('טלפון') > 0, $('lErr').textContent);
+type('lPhone', '0501234567');
+submit();
+ok('bli email -> shgiaa', $('lErr').textContent.indexOf('אימייל') > 0, $('lErr').textContent);
+type('lMail', 'a@b.co.il');
+submit();
+ok('bli ishur -> shgiaa', $('lErr').textContent.indexOf('לאשר') > 0, $('lErr').textContent);
+$('lOk').checked = true;
+var sent = null;
+window.fetch = function(u, o){ sent = { url: u, opt: o }; return Promise.resolve({}); };
+submit();
+ok('nishlach la webhook', sent && sent.url.indexOf('hook.eu2.make.com') > 0, sent ? sent.url.slice(-22) : 'lo nishlach');
+var payload = sent ? JSON.parse(sent.opt.body) : {};
+ok('ha tag nachon', payload.tag === 'calc-goal-gap', payload.tag);
+ok('yesh shem, telefon, email', payload.name === 'אבי' && payload.phone === '0501234567' && payload.email === 'a@b.co.il');
+ok('yesh et ha paar ba payload', typeof payload.gap === 'number', String(payload.gap));
+ok('yesh sug ha yaad', payload.goal_type === 'kids', payload.goal_type);
+ok('bli preflight (text/plain)', sent.opt.headers['Content-Type'].indexOf('text/plain') === 0);
+
+
+console.log('--- kelet pasul lo mashir misparim yeshanim ba kaftor ---');
+click(goBtn('3')); click(goBtn('2')); click(goBtn('1'));
+click(pick('custom'));
+type('cAmount', 400000); type('cYears', 15);
+click(goBtn('3')); click(goBtn('4'));
+var good = decodeURIComponent($('waBtn').getAttribute('href').split('text=')[1]);
+ok('maslul takin: yesh mispar ba hodaa', /[0-9],[0-9]/.test(good), good.slice(0, 45));
+type('cYears', 0.01);
+var bad = decodeURIComponent($('waBtn').getAttribute('href').split('text=')[1]);
+ok('kelet pasul: ein mispar ba hodaa', !/[0-9],[0-9]/.test(bad), bad);
+ok('ve ha koteret lo medaberet al paar', $('ctaTitle').textContent.indexOf('לסגור את ה') < 0,
+   $('ctaTitle').textContent);
+type('cYears', 15);
+ok('chozer la mispar ha nachon', decodeURIComponent($('waBtn').getAttribute('href').split('text=')[1]) === good);
+
 console.log('');
 console.log('SOF: ' + pass + ' passed, ' + fail + ' failed');
 process.exit(fail ? 1 : 0);
