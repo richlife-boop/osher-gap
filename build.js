@@ -45,7 +45,10 @@ if (ui.indexOf('OSHER_ENGINE') < 0) throw new Error('קוד הממשק לא מצ
 if (ui.indexOf('<script') >= 0) throw new Error('תגית script נשארה בקוד הממשק');
 
 fs.mkdirSync(DIST, { recursive: true });
-fs.writeFileSync(path.join(DIST, 'gap.css'), css.trim() + '\n', 'utf8');
+
+/* הגופן נכנס לתוך ה-CSS, כדי שההטמעה בוורדפרס תהיה שלוש שורות ולא ארבע */
+const FONT = "@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;600&display=swap');";
+fs.writeFileSync(path.join(DIST, 'gap.css'), FONT + '\n' + css.trim() + '\n', 'utf8');
 
 const bundle = [
   '/* מחשבון הפער, אושר פיננסי. נבנה אוטומטית מ-page.html. אין לערוך ידנית. */',

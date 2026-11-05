@@ -4,3 +4,5 @@ codex_out.txt
 page.v1-backup.html
 .npm-audit-cache/
 live/
+firebase-debug.log
+*.log
