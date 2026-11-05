@@ -76,6 +76,10 @@ const goBtn = (n) => doc.querySelector('.step.on [data-go="' + n + '"]');
   ok('ha itzuv mesugnan l tokh ha mount', css.split('#osher-gap').length - 1 > 40,
      (css.split('#osher-gap').length - 1) + ' boRRim mesugnanim');
   ok('yesh ipus negged ha tavnit', css.indexOf('appearance:none') > 0);
+  ok('ha machshvon mele et ha masach', css.indexOf('min-height:100vh') > 0);
+  var bg = doc.body.style.background.replace(/\s/g, '').toLowerCase();
+  ok('ha reka shel ha daf nitzba krem',
+     bg.indexOf('f4f0e9') >= 0 || bg.indexOf('rgb(244,240,233)') >= 0, doc.body.style.background);
   console.log('');
   console.log('SOF: ' + pass + ' passed, ' + fail + ' failed');
   process.exit(fail ? 1 : 0);

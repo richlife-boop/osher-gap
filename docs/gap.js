@@ -366,6 +366,18 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
   var MAX_KIDS = 6, EF_MONTHS = 3;
   var goal = 'kids', step = 1, kidCount = 0;
   var LAST = { gap: null, need: null, what: '' };
+
+  /* 🔴 הרקע הקרם יושב על המחשבון, והמחשבון גבוה רק כגובה התוכן.
+     בלי זה נשאר פס לבן מתחתיו ומצדדיו, כי הרקע של דף וורדפרס לבן.
+     זאת ההתערבות היחידה שלנו מחוץ לגבולות המחשבון, והיא מכוונת. */
+  (function paintPage(){
+    try {
+      var CREAM = '#f4f0e9';
+      document.documentElement.style.background = CREAM;
+      document.body.style.background = CREAM;
+      document.body.style.margin = '0';
+    } catch(ignore) {}
+  })();
   /* 🔴 הוובהוק של תרחיש 9528256, שיוצר ליד אמיתי בפייברי בסטטוס "1) חדש".
      לא הוובהוק של רשימות הדיוור. ליד שנוחת ברשימת מיילים הוא ליד שאף אחד לא מתקשר אליו. */
   var HOOK = 'https://hook.eu2.make.com/vkkcs5er32scebp61kcdh47cl5ray9ih';
