@@ -80,6 +80,9 @@ const goBtn = (n) => doc.querySelector('.step.on [data-go="' + n + '"]');
   var bg = doc.body.style.background.replace(/\s/g, '').toLowerCase();
   ok('ha reka shel ha daf nitzba krem',
      bg.indexOf('f4f0e9') >= 0 || bg.indexOf('rgb(244,240,233)') >= 0, doc.body.style.background);
+  ok('ha machshvon mishtachrer me ha mechola shel Elementor',
+     css.indexOf('margin-inline:calc(50% - 50vw)') > 0);
+  ok('bli glila ofkit', css.indexOf('overflow-x:clip') > 0);
   console.log('');
   console.log('SOF: ' + pass + ' passed, ' + fail + ' failed');
   process.exit(fail ? 1 : 0);

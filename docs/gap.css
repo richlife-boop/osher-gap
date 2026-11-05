@@ -18,7 +18,12 @@
   --late:#b8860b; --off:#9b3a2f; --ink-on-late:#26261f;
 }
 #osher-gap *{box-sizing:border-box}
-#osher-gap{margin:0;width:100%;min-height:100vh;background:var(--cream);color:var(--olive);
+/* 🔴 המחשבון יושב בתוך מכולה של אלמנטור מסוג boxed, שיש לה רוחב מקסימלי
+   ושוליים משלה, וזה מה שיצר את השטח הלבן בצדדים.
+   margin-inline שלילי משחרר אותו לרוחב המסך המלא בלי ליצור גלילה אופקית,
+   ובלי להיות תלוי בהגדרות של התבנית או של אלמנטור. */
+#osher-gap{margin:0;margin-inline:calc(50% - 50vw);min-height:100vh;overflow-x:clip;
+  background:var(--cream);color:var(--olive);
   font-family:"Noto Sans Hebrew",system-ui,sans-serif;font-weight:400;line-height:1.55;
   -webkit-font-smoothing:antialiased}
 #osher-gap .wrap{max-width:640px;margin:0 auto;padding:26px 16px 56px}
