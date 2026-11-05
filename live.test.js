@@ -48,6 +48,7 @@ const type = (id, v) => {
   ok('shaar: bli milui lo ovrim', !!doc.querySelector('.step.on[data-step="2"]'));
   [].forEach.call(ag, function(a, i){ a.value = i ? '9' : '4';
     a.dispatchEvent(new window.Event('input', { bubbles: true })); });
+  type('perChild', 600000); type('targetAge', 20);
   click(go('3'));
   type('save', 900); type('has', 0); type('exp', 18695);
   click(go('4'));

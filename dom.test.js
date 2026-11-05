@@ -52,13 +52,17 @@ ok('pane chofesh mustar', $('pane-freedom').hidden);
 ok('ha koteret hitadkena', $('h2title').textContent.includes('הילדים'), $('h2title').textContent);
 ok('2 yeladim k brirat mechdal', doc.querySelectorAll('.kidrow').length === 2);
 ok('ha hagdarot lo mustarot yoter', !doc.querySelector('details.adv'));
-ok('ha mishpat omer ma munach', $('advSum').textContent.includes('600,000') &&
-   $('advSum').textContent.includes('גיל 20'), $('advSum').textContent);
+ok('ein brirot mechdal gam b shnei ha sdot ha ele',
+   $('perChild').value === '' && $('targetAge').value === '',
+   [$('perChild').value, $('targetAge').value].join('|'));
+ok('yesh remez bimkom erech', $('perChild').getAttribute('placeholder').indexOf('600,000') > 0);
+ok('ha shura mitachat nothenet hadracha',
+   $('advSum').textContent.indexOf('450,000') > 0, $('advSum').textContent);
 ok('ha sdot gluyim', !!$('perChild') && !!$('targetAge'));
-type('perChild', 450000);
-ok('ha summary mitadken im ha erech', $('advSum').textContent.includes('450,000'), $('advSum').textContent);
-type('targetAge', 18);
-ok('ve gam im ha gil', $('advSum').textContent.includes('גיל 18'));
+type('perChild', 450000); type('targetAge', 18);
+ok('ha shura mitadkenet acharei milui', $('advSum').textContent.indexOf('כלומר') === 0 &&
+   $('advSum').textContent.includes('450,000') && $('advSum').textContent.includes('גיל 18'),
+   $('advSum').textContent);
 type('perChild', 600000); type('targetAge', 20);
 ok('mad hitkadmut: 2', doc.querySelectorAll('.bar i.on').length === 2);
 

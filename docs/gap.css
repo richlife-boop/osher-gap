@@ -64,6 +64,8 @@
 #osher-gap input{width:100%;padding:13px;border:0;border-radius:10px;background:var(--cream);
   color:var(--olive);font:inherit;font-size:17px;font-weight:500;-webkit-text-fill-color:var(--olive)}
 #osher-gap input:focus{outline:2px solid var(--olive-mid);outline-offset:1px}
+/* 🔴 בלי זה הרמז נראה כמו ערך שכבר הוזן, והמשתמש חושב שיש ברירת מחדל. */
+#osher-gap input::placeholder{color:#9a9c91;opacity:1;font-weight:400;-webkit-text-fill-color:#9a9c91}
 #osher-gap .row{display:grid;gap:12px;grid-template-columns:1fr 1fr}
 @media(max-width:520px){#osher-gap .row{grid-template-columns:1fr}}
 #osher-gap .fld+.fld{margin-top:14px}

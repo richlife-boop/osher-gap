@@ -70,6 +70,8 @@
 #osher-gap input{width:100%;padding:13px;border:0;border-radius:10px;background:var(--cream);
   color:var(--olive);font:inherit;font-size:17px;font-weight:500;-webkit-text-fill-color:var(--olive)}
 #osher-gap input:focus{outline:2px solid var(--olive-mid);outline-offset:1px}
+/* 🔴 בלי זה הרמז נראה כמו ערך שכבר הוזן, והמשתמש חושב שיש ברירת מחדל. */
+#osher-gap input::placeholder{color:#9a9c91;opacity:1;font-weight:400;-webkit-text-fill-color:#9a9c91}
 #osher-gap .row{display:grid;gap:12px;grid-template-columns:1fr 1fr}
 @media(max-width:520px){#osher-gap .row{grid-template-columns:1fr}}
 #osher-gap .fld+.fld{margin-top:14px}
@@ -183,9 +185,9 @@
         <div class="adv">
           <div class="row">
             <div><label for="perChild">כמה כסף לכל ילד</label>
-              <input id="perChild" type="number" inputmode="numeric" value="600000"></div>
+              <input id="perChild" type="number" inputmode="numeric" placeholder="למשל 600,000"></div>
             <div><label for="targetAge">עד איזה גיל</label>
-              <input id="targetAge" type="number" inputmode="numeric" value="20"></div>
+              <input id="targetAge" type="number" inputmode="numeric" placeholder="למשל 20"></div>
           </div>
           <p class="hint" id="advSum"></p>
         </div>
@@ -454,7 +456,7 @@
     var ta = filled('targetAge') ? num('targetAge') : 0;
     $('advSum').textContent = (pc > 0 && ta > 0)
       ? 'כלומר ' + pc.toLocaleString('he-IL') + ' ש"ח לכל ילד, עד גיל ' + ta + '.'
-      : 'אפשר לשנות את שני המספרים האלה.';
+      : 'להתרשמות: הון עצמי לדירה בערך 450,000, וחתונה בערך 150,000.';
   }
   $('perChild').addEventListener('input', syncAdv);
   $('targetAge').addEventListener('input', syncAdv);
