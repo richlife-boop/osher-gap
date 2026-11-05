@@ -3,3 +3,4 @@ codex_out.txt
 *.output
 page.v1-backup.html
 .npm-audit-cache/
+live/
