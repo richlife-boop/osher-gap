@@ -376,6 +376,18 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
       document.documentElement.style.background = CREAM;
       document.body.style.background = CREAM;
       document.body.style.margin = '0';
+      /* 🔴 בין המחשבון לבין ה-body יש שכבות של אלמנטור (מכולה, מכולה פנימית,
+         ווידג'ט), וכל אחת מהן יכולה להישאר לבנה מתחת לתוכן. צובעים את כולן.
+         הדף הזה מוקדש למחשבון בלבד, ולכן זה בטוח. */
+      var el = document.getElementById('osher-gap');
+      while(el && el.parentElement && el.parentElement !== document.body){
+        el = el.parentElement;
+        el.style.background = CREAM;
+        el.style.padding = '0';
+        el.style.margin = '0';
+        el.style.maxWidth = 'none';
+        el.style.width = '100%';
+      }
     } catch(ignore) {}
   })();
   /* 🔴 הוובהוק של תרחיש 9528256, שיוצר ליד אמיתי בפייברי בסטטוס "1) חדש".

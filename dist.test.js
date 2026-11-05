@@ -83,6 +83,7 @@ const goBtn = (n) => doc.querySelector('.step.on [data-go="' + n + '"]');
   ok('ha machshvon mishtachrer me ha mechola shel Elementor',
      css.indexOf('margin-inline:calc(50% - 50vw)') > 0);
   ok('bli glila ofkit', css.indexOf('overflow-x:clip') > 0);
+  ok('gova ha masach ha katan b nayad (svh)', css.indexOf('min-height:100svh') > 0);
   console.log('');
   console.log('SOF: ' + pass + ' passed, ' + fail + ' failed');
   process.exit(fail ? 1 : 0);

@@ -28,7 +28,7 @@
    ושוליים משלה, וזה מה שיצר את השטח הלבן בצדדים.
    margin-inline שלילי משחרר אותו לרוחב המסך המלא בלי ליצור גלילה אופקית,
    ובלי להיות תלוי בהגדרות של התבנית או של אלמנטור. */
-#osher-gap{margin:0;margin-inline:calc(50% - 50vw);min-height:100vh;overflow-x:clip;
+#osher-gap{margin:0;margin-inline:calc(50% - 50vw);min-height:100vh;min-height:100svh;overflow-x:clip;
   background:var(--cream);color:var(--olive);
   font-family:"Noto Sans Hebrew",system-ui,sans-serif;font-weight:400;line-height:1.55;
   -webkit-font-smoothing:antialiased}
@@ -290,6 +290,18 @@
       document.documentElement.style.background = CREAM;
       document.body.style.background = CREAM;
       document.body.style.margin = '0';
+      /* 🔴 בין המחשבון לבין ה-body יש שכבות של אלמנטור (מכולה, מכולה פנימית,
+         ווידג'ט), וכל אחת מהן יכולה להישאר לבנה מתחת לתוכן. צובעים את כולן.
+         הדף הזה מוקדש למחשבון בלבד, ולכן זה בטוח. */
+      var el = document.getElementById('osher-gap');
+      while(el && el.parentElement && el.parentElement !== document.body){
+        el = el.parentElement;
+        el.style.background = CREAM;
+        el.style.padding = '0';
+        el.style.margin = '0';
+        el.style.maxWidth = 'none';
+        el.style.width = '100%';
+      }
     } catch(ignore) {}
   })();
   /* 🔴 הוובהוק של תרחיש 9528256, שיוצר ליד אמיתי בפייברי בסטטוס "1) חדש".
