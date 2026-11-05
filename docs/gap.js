@@ -754,18 +754,29 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
     /* שלושת הראשונים הם מה שהתרחיש ממפה לפייברי:
        name→accountname, phone→telephone1, email→emailaddress1.
        השאר נשלח לצורך ההקשר, ומחכה לעדכון שדה התיאור בתרחיש. */
+    var summary = 'מחשבון הפער, ' + (GOALNAME[goal] || goal) +
+      (gapR ? ', חסר ' + Number(gapR).toLocaleString('he-IL') : '') +
+      (needR ? ', צריך ' + Number(needR).toLocaleString('he-IL') + ' בחודש' : '');
+
+    /* 🔴 התרחיש כותב בתיאור הליד: "ליד מטופס וובינר · ref: {{ref}} · {{page_url}}".
+       לכן ההקשר נכנס דרך ref, ואין צורך לגעת באוטומציה החיה שמשרתת גם את טופס הוובינר.
+       summary נשלח גם הוא, ויתפוס ברגע שהתיאור יעודכן שם. */
     var data = {
       name: name, phone: phone, email: mail,
+      ref: summary,
+      summary: summary,
       source: 'מחשבון הפער',
       goal_type: GOALNAME[goal] || goal,
       gap: gapR, monthly_needed: needR,
       monthly_saving: String(num('save')), has_today: String(num('has')),
       monthly_expense: String(num('exp')),
-      summary: 'מחשבון הפער, ' + (GOALNAME[goal] || goal) +
-               (gapR ? ', חסר ' + gapR : '') + (needR ? ', צריך ' + needR + ' בחודש' : ''),
       page_url: location.href,
-      utm_source: q.utm_source || '', utm_medium: q.utm_medium || '',
-      utm_campaign: q.utm_campaign || '', utm_content: q.utm_content || ''
+      /* ברירת מחדל כדי שהלידים האלה יהיו מזוהים בדוחות גם בלי UTM,
+         כי התנועה מגיעה ממאני צאט ולא מקמפיין ממומן. */
+      utm_source: q.utm_source || 'money-gap',
+      utm_medium: q.utm_medium || 'calculator',
+      utm_campaign: q.utm_campaign || 'money-gap-calculator',
+      utm_content: q.utm_content || ''
     };
 
     /* urlencoded ולא JSON: זאת בקשה פשוטה בלי preflight, ולכן היא עוברת

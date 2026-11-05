@@ -250,6 +250,11 @@ ok('bli preflight (urlencoded)', sent.opt.headers['Content-Type'].indexOf('appli
 ok('shlosha sdot she ha tarchish memape', pp.name === 'אבי' && pp.phone === '0501234567' && pp.email === 'a@b.co.il');
 ok('yesh makor', pp.source === 'מחשבון הפער', pp.source);
 ok('yesh sikum l sde ha teur', pp.summary.indexOf('מחשבון הפער') === 0, pp.summary);
+ok('ref mekil et ha sikum (ze ma she nichnas la teur ha chai)',
+   pp.ref === pp.summary, pp.ref);
+ok('utm_source brirat mechdal', pp.utm_source === 'money-gap', pp.utm_source);
+ok('utm_campaign brirat mechdal', pp.utm_campaign === 'money-gap-calculator');
+ok('ha misparim ba sikum im psikim', /[0-9],[0-9]/.test(pp.summary), pp.summary);
 ok('ha paar meugal, bli nekudot', pp.gap.indexOf('.') < 0, pp.gap);
 ok('sug ha yaad b ivrit', pp.goal_type === 'ילדים', pp.goal_type);
 
