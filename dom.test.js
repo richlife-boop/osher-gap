@@ -98,7 +98,7 @@ ok('ein "98 chodashim" (mamir l shanim)', !/\d{2,} חודשים/.test(out()), ou
 
 ok('ein "yitkalkel" (ze baltam, lo keren chirum)', !out().includes('יתקלקל'));
 ok('medaber al hafsakat hachnasa', out().includes('ההכנסה'), out().slice(0, 40));
-ok('ha daf mitrachev rak b shlav 4', doc.body.classList.contains('wide'));
+ok('ha daf mitrachev rak b shlav 4', $('osher-gap').classList.contains('wide'));
 
 console.log('--- ha hero ve ha tag ---');
 ok('yesh ariach hero', !!doc.querySelector('#out .tile.hero'));

@@ -399,7 +399,8 @@ if (typeof window !== 'undefined') window.OSHER_ENGINE = API;
     Array.prototype.forEach.call(document.querySelectorAll('.bar i'), function(b, k){
       b.classList.toggle('on', k < n);
     });
-    document.body.classList.toggle('wide', n === 4);
+    var host = document.getElementById('osher-gap');
+    if(host) host.classList.toggle('wide', n === 4);
     if(n === 4) render();
     window.scrollTo(0, 0);
   }

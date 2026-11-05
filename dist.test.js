@@ -73,6 +73,9 @@ const goBtn = (n) => doc.querySelector('.step.on [data-go="' + n + '"]');
   ok('kria shniya lo mochekt et ha matzav',
      doc.getElementById('osher-gap').innerHTML.length === before);
 
+  ok('ha itzuv mesugnan l tokh ha mount', css.split('#osher-gap').length - 1 > 40,
+     (css.split('#osher-gap').length - 1) + ' boRRim mesugnanim');
+  ok('yesh ipus negged ha tavnit', css.indexOf('appearance:none') > 0);
   console.log('');
   console.log('SOF: ' + pass + ' passed, ' + fail + ' failed');
   process.exit(fail ? 1 : 0);

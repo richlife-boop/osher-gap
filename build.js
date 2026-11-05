@@ -29,9 +29,19 @@ function between(s, open, close, label) {
 
 const css = between(html, '<style>', '</style>', 'style');
 
-/* גוף הדף, בלי תגיות ה-script */
-let body = between(html, '<body>', '</body>', 'body');
-body = body.replace(/<script[\s\S]*?<\/script>/g, '').trim();
+/* התוכן שבתוך ה-mount בלבד, בלי תגיות ה-script.
+   🔴 לא כל ה-body: העטיפה עצמה כבר קיימת בדף שבאתר, וכפילות שלה
+   יוצרת שני אלמנטים עם אותו מזהה.
+   החיפוש לא תלוי בסופי שורה, כי הקובץ נשמר ב-CRLF. */
+const openTag = '<div id="' + MOUNT + '">';
+const openAt = html.indexOf(openTag);
+if (openAt < 0) throw new Error('לא נמצאה עטיפת ה-mount');
+const firstScript = html.indexOf('<script', openAt);
+if (firstScript < 0) throw new Error('לא נמצא script אחרי ה-mount');
+const closeAt = html.lastIndexOf('</div>', firstScript);
+if (closeAt < 0) throw new Error('לא נמצאה סגירת ה-mount');
+let body = html.slice(openAt + openTag.length, closeAt).trim();
+if (body.indexOf('id="' + MOUNT + '"') >= 0) throw new Error('השלד מכיל את העטיפה בתוך עצמו');
 
 /* קוד הממשק: ה-IIFE האחרון */
 const scripts = html.match(/<script>([\s\S]*?)<\/script>/g) || [];
